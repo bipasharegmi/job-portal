@@ -1,0 +1,366 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Employer Dashboard</title>
+  <style>
+    /* General Reset */
+    * {
+      margin: 0;
+      padding: 0;
+      box-sizing: border-box;
+      font-family: Arial, sans-serif;
+    }
+
+    body {
+      display: flex;
+      height: 100vh;
+      background: #f9f9f9;
+      color: #333;
+    }
+
+    /* Sidebar */
+    .sidebar {
+      width: 250px;
+      background: #89f6f6;
+      color: white;
+      padding: 20px;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      text-align: center;
+    }
+
+    .sidebar h2 {
+      margin-bottom: 30px;
+      font-size: 1.5rem;
+    }
+
+    .sidebar button {
+      width: 100%;
+      padding: 10px 15px;
+      margin: 10px 0;
+      background: #555;
+      color: white;
+      border: none;
+      border-radius: 5px;
+      cursor: pointer;
+      transition: 0.3s;
+      font-size: 1rem;
+    }
+
+    .sidebar button:hover {
+      background: #3c89a7;
+    }
+
+    /* Content Area */
+    .content {
+      flex: 1;
+      padding: 20px;
+    }
+
+    .hidden {
+      display: none;
+    }
+
+    /* Tables */
+    .data-table {
+      width: 100%;
+      border-collapse: collapse;
+      margin-top: 20px;
+    }
+
+    .data-table th,
+    .data-table td {
+      padding: 10px;
+      text-align: left;
+      border: 1px solid #ddd;
+    }
+
+    .data-table th {
+      background: #333;
+      color: white;
+    }
+
+    .data-table .actions button {
+      padding: 5px 10px;
+      border: none;
+      border-radius: 5px;
+      cursor: pointer;
+      font-size: 0.9rem;
+    }
+
+    .data-table .actions .approve-btn {
+      background: #28a745;
+      color: white;
+    }
+
+    .data-table .actions .reject-btn {
+      background: #dc3545;
+      color: white;
+    }
+
+    .data-table .actions button:hover {
+      opacity: 0.9;
+    }
+
+    /* Forms */
+    .form-container {
+      background: white;
+      padding: 20px;
+      border-radius: 10px;
+      box-shadow: 0 4px 10px rgba(0, 0, 0, 0.2);
+    }
+
+    .form-container h2 {
+      margin-bottom: 20px;
+    }
+    .edit-btn {
+    display: inline-block;
+    background-color: #28a745; /* Green background */
+    color: white; /* White text */
+    text-align: center;
+    padding: 4px 8px; /* Smaller padding */
+    text-decoration: none; /* Remove underline */
+    font-size: 12px; /* Even smaller font size */
+    font-weight: bold; /* Bold text */
+    border-radius: 5px; /* Rounded corners */
+    border: 1px solid transparent; /* Optional border for better structure */
+    cursor: pointer; /* Pointer on hover */
+    box-shadow: 0px 2px 5px rgba(0, 0, 0, 0.2); /* Add slight shadow */
+}
+
+
+/* Add hover effect */
+.edit-btn:hover {
+    background-color: #218838; /* Darker green on hover */
+    box-shadow: 0px 4px 8px rgba(0, 0, 0, 0.3); /* Enhanced shadow on hover */
+}
+
+  </style>
+</head>
+<body>
+  <!-- Sidebar -->
+  <div class="sidebar">
+    <h2> Company Dashboard</h2>
+    <button onclick="showForm('postJobForm')">Post Job</button>
+    <button onclick="showForm('viewJobs')">View My Jobs</button>
+    <button onclick="showForm('viewApplications')">Applications</button>
+    <button class="logout-btn" onclick="logout()">Logout</button>
+  </div>
+
+  <!-- Content -->
+  <div class="content">
+    <!-- Post Job Form -->
+    <!-- <div id="postJobForm" class="form-container">
+      <h2>Post a Job</h2>
+      <form>
+        <label for="title">Title</label>
+        <input type="text" id="title" name="title" placeholder="Job Title" required>
+
+        <label for="description">Description</label>
+        <textarea id="description" name="description" rows="4" placeholder="Job Description" required></textarea>
+
+        <label for="salary">Salary</label>
+        <input type="text" id="salary" name="salary" placeholder="Salary" required>
+
+        <label for="company">Company</label>
+        <input type="text" id="company" name="company" placeholder="Company" required>
+
+        <button type="submit">Post Job</button>
+      </form>
+    </div> -->
+    <div id="postJobForm" class="form-container">
+        <h2 style="text-align: center; margin-bottom: 20px;">Post a Job</h2>
+        <form>
+          <div style="display: flex; flex-direction: column; gap: 15px;">
+            <!-- Title Field -->
+            <div>
+              <label for="title" style="font-weight: bold;">Title</label>
+              <input type="text" id="title" name="title" placeholder="Job Title" required 
+                style="width: 100%; padding: 10px; border: 1px solid #ccc; border-radius: 5px; margin-top: 5px;">
+            </div>
+            <!-- Description Field -->
+            <div>
+              <label for="description" style="font-weight: bold;">Description</label>
+              <textarea id="description" name="description" rows="4" placeholder="Job Description" required 
+                style="width: 100%; padding: 10px; border: 1px solid #ccc; border-radius: 5px; margin-top: 5px;"></textarea>
+            </div>
+            <!-- Salary Field -->
+            <div>
+              <label for="salary" style="font-weight: bold;">Salary</label>
+              <input type="text" id="salary" name="salary" placeholder="Salary" required 
+                style="width: 100%; padding: 10px; border: 1px solid #ccc; border-radius: 5px; margin-top: 5px;">
+            </div>
+            <!-- Company Field -->
+            <div>
+              <label for="company" style="font-weight: bold;">Company</label>
+              <input type="text" id="company" name="company" placeholder="Company" required 
+                style="width: 100%; padding: 10px; border: 1px solid #ccc; border-radius: 5px; margin-top: 5px;">
+            </div>
+            <!-- Submit Button -->
+            <div style="text-align: center;">
+              <button type="submit" style="
+                padding: 10px 20px;
+                background-color: #0d1619;
+                color: white;
+                border: none;
+                border-radius: 5px;
+                cursor: pointer;
+                font-size: 1rem;
+                transition: 0.3s;
+              ">Post Job</button>
+            </div>
+          </div>
+        </form>
+      </div>
+      
+
+    <!-- View Jobs -->
+    <div id="viewJobs" class="hidden">
+      <h2>My Jobs</h2>
+      <table class="data-table">
+        <thead>
+          <tr>
+            <th>Title</th>
+            <th>Description</th>
+            <th>Salary</th>
+            <th>Company</th>
+            <th>Actions</th>
+          </tr>
+        </thead>
+        <tbody>
+           <!-- <tr>
+            <td>Backend Developer</td>
+            <td>We are seeking a skilled Backend Developer to manage the interchange of data between users and servers, develop APIs, and ensure high performance of the application.</td>
+            <td>70,000</td>
+            <td>LOGIN POINT</td>
+            <td class="actions">
+                <a href="edit.html" class="edit-btn">Edit</a>
+              <button class="reject-btn">Delete</button>
+            </td>
+          </tr>  -->
+          <!-- <td>Web Developer</td>
+            <td>We are looking for a creative Web Developer to build and maintain functional, user-friendly websites and web applications.</td>
+            <td>100,000</td>
+            <td>LOGIN POINT</td>
+            <td class="actions">
+                <a href="edit.html" class="edit-btn">Edit</a>
+              <button class="reject-btn">Delete</button>
+            </td>
+          <tr> -->
+            <td>Full stack developer</td>
+            <td>Skilled Full Stack Developer needed to design, develop, and maintain scalable web applications, ensuring seamless integration of front-end and back-end technologies.</td>
+            <td>90,000</td>
+            <td>IT hub</td>
+            <td class="actions">
+                <a href="edit.html" class="edit-btn">Edit</a>
+              <button class="reject-btn">Delete</button>
+            </td>
+          </tr>
+           <tr>
+             <td>Graphic designer</td>
+            <td>We are seeking a creative Graphic Designer to produce visually appealing designs for both digital and print media.</td>
+            <td>80,000</td>
+            <td>IT hub</td>
+            <td class="actions">
+                <a href="edit.html" class="edit-btn">Edit</a>
+              <button class="reject-btn">Delete</button>
+            </td>
+          </tr> 
+          <!-- <tr>
+            <td>Web Developer</td>
+            <td>We are looking for a creative Web Developer to build and maintain functional, user-friendly websites and web applications.</td>
+            <td>100,000</td>
+            <td>LOGIN POINT</td>
+            <td class="actions">
+                <a href="edit.html" class="edit-btn">Edit</a>
+              <button class="reject-btn">Delete</button>
+            </td>
+          </tr> -->
+          <!-- <tr>
+            <td>Front-end Developer</td>
+            <td>We are looking for a skilled Front-End Developer to join our dynamic team to create user-friendly web pages and applications</td>
+            <td>80,000</td>
+            <td>F1 Soft International</td>
+            <td class="actions">
+                <a href="edit.html" class="edit-btn">Edit</a>
+              <button class="reject-btn">Delete</button>
+            </td>
+          </tr> -->
+          
+        </tbody>
+      </table>
+    </div>
+
+    <!-- View Applications -->
+    <div id="viewApplications" class="hidden">
+      <h2>Applications</h2>
+      <table class="data-table">
+        <thead>
+          <tr>
+            <th>Name</th>
+            <th>Email</th>
+            <th>Phone</th>
+            <th>Status</th>
+            <th>Actions</th>
+          </tr>
+        </thead>
+        <tbody>
+          <!-- <tr>
+            <td>Anuradha Sukla</td>
+            <td>anuradha@gmail.com</td>
+            <td>9807500526</td>
+            <td>Pending</td>
+            <td class="actions">
+              <button class="approve-btn" onclick="approveApplication(this)">Approve</button>
+              <button class="reject-btn" onclick="rejectApplication(this)">Reject</button>
+            </td>
+          </tr> -->
+          
+          <tr>
+            <td>Suraksha Khatri</td>
+            <td>suraksha@gmail.com</td>
+            <td>9827401904</td>
+            <td>Pending</td>
+            <td class="actions">
+              <button class="approve-btn" onclick="approveApplication(this)">Approve</button>
+              <button class="reject-btn" onclick="rejectApplication(this)">Reject</button>
+            </td>
+          </tr>
+        </tbody>
+      </table>
+    </div>
+  </div>
+
+  <script>
+    // Function to toggle forms
+    function showForm(formId) {
+      document.getElementById('postJobForm').classList.add('hidden');
+      document.getElementById('viewJobs').classList.add('hidden');
+      document.getElementById('viewApplications').classList.add('hidden');
+      document.getElementById(formId).classList.remove('hidden');
+    }
+
+    // Approve application
+    function approveApplication(button) {
+      const row = button.closest('tr');
+      row.cells[3].textContent = 'Approved'; // Update status
+      alert('Application Approved!');
+    }
+
+    // Reject application
+    function rejectApplication(button) {
+      const row = button.closest('tr');
+      row.cells[3].textContent = 'Rejected'; // Update status
+      alert('Application Rejected!');
+    }
+
+    function logout() {
+    // Display a logout success message
+    alert('You have been logged out successfully!');
+    }
+  </script>
+</body>
+</html>
